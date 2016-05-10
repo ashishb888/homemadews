@@ -26,7 +26,7 @@ use Session;
 
 class AuthenticateController extends Controller {   
     
-    public function login(Request $request){
+    public function signin(Request $request){
         try{
             $content = $request::getContent();
             Log::debug('$content');
@@ -84,6 +84,87 @@ class AuthenticateController extends Controller {
             return json_encode(Utility::genErrResp("internal_err"));
         }        
     }
+    
+     public function signup(Request $request){  
+        try{
+            $content = $request::getContent();
+            Log::debug('$content');
+            Log::debug($content);
+            $jsondata=json_decode($content, true);
+            $fullname = $jsondata['data']['fullName'];
+            $mobileno = $jsondata['data']['mobileNo'];
+            $email = $jsondata['data']['email'];
+            $password = $jsondata['data']['password'];
+            $repassword = $jsondata['data']['retypePassword'];
+            $curr_date = date('Y-m-d H:i:s T');
+            $cu_cust_id="homemade000";
+            
+            $validator = Validator::make(
+                            [
+                        'cu_name' => $fullname,
+                        'cu_name_reg' => $fullname,
+                        'cu_phone' => $mobileno,
+                        'cu_phone_reg'=>$mobileno,
+                        'cu_email' => $email,
+                        'cu_password' => $password,
+                        'cu_repasswd'=> $repassword
+                            ], [
+                        'cu_name' =>"required|min:6",  
+                        'cu_phone' => "required|unique:customer,cu_phone",
+                        'cu_password' => "required|min:6",
+                        'cu_email' => "email",
+                        'cu_repasswd'=>"required|min:6|same:cu_password",
+                        'cu_name_reg' => array('Regex:/^[A-Za-z\ \'\\.]+$/'),
+                        'cu_phone_reg' => array('Regex:/^(\+\d{1,3}[- ]?)?\d{10}$/')
+                            ],
+                     $messages = array(
+                        'cu_name.required' => json_encode(config('validation_message.cu_name_required')),
+                        'cu_phone.required' => json_encode(config('validation_message.cu_phone_required')),
+                        'cu_password.required' => json_encode(config('validation_message.cu_password_required')),
+                        'cu_repasswd.required' => json_encode(config('validation_message.cu_repasswd')),
+                        'cu_name.min' => json_encode(config('validation_message.cu_name_min')),
+                        'cu_password.min' => json_encode(config('validation_message.cu_password_min')),
+                        'cu_repasswd.min' => json_encode(config('validation_message.cu_repasswd_min')),
+                        'cu_name_reg.regex' => json_encode(config('validation_message.cu_name_reg')),
+                        'cu_repasswd.same' => json_encode(config('validation_message.cu_repasswd_same')),
+                        'cu_phone.unique' => json_encode(config('validation_message.cu_phone_unique')),
+                        'cu_email.email' => json_encode(config('validation_message.cu_email')),
+                        'cu_phone_reg.regex' => json_encode(config('validation_message.cu_phone_reg'))
+                    ));
+            if ($validator->fails()) {    
+               return Utility::validation_err($validator);
+            }
+            $cu_id = DB::table('customer')->insertGetId(
+                                ['cu_name' => $fullname,
+                                    'cu_phone' => $mobileno,
+                                    'password' => md5($password),
+                                    'cu_email' => $email,
+                                    'cu_cust_id' => $cu_cust_id,
+                                    'cu_last_logged_in' => NULL,
+                                    'created_at' => $curr_date,
+                                    'updated_at' => $curr_date,
+                                    'deleted_at' => NULL
+                                ],'cu_id');
+            if($cu_id){    
+                $update_id = DB::table('customer')
+                ->where("cu_id", $cu_id)
+                ->update(array("cu_cust_id" => $cu_cust_id.$cu_id));  
+                if($update_id){
+                    $retArr['status'] = "success";
+                    $retArr['messages'] = "signUp Successfully";
+                    $retArr['data']="Signup successfully for customer ".$cu_id;
+                    Log::debug(json_encode($retArr));     
+                    Log::debug("--Signup--");
+                    Log::debug(json_encode($retArr));
+                    return json_encode($retArr);
+                }
+            }
+        }catch (Exception $ex) {
+            Log::debug("exception: " . $ex);
+            return json_encode(Utility::genErrResp("internal_err"));
+        }        
+    }
+    
     
   
 

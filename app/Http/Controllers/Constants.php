@@ -10,7 +10,7 @@ class Constants {
     const STATUS = 'status';
     const ERRORS = 'errors';
     const CODE = 'code';
-    const ERR = 'ERROR';
+    const ERR = 'error';
     const ERR_MSG = 'err_msg';
-    const SUCCESS = 'SUCCESS';
+    const SUCCESS = 'success';
 }

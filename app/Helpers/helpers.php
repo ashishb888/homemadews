@@ -24,7 +24,7 @@ class Utility {
     public static function validation_err($validator)
     { 
         $messages = $validator->messages()->all();
-        $validErr['status'] = 'ERROR';
+        $validErr['status'] = 'error';
         foreach ($messages as $msg) {
                 $validErr['messages'][] = $msg;
             }
