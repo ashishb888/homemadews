@@ -15,5 +15,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('SignIn', array("uses" => "AuthenticateController@signin"));
-Route::post('SignUp', array("uses" => "AuthenticateController@signup"));
+Route::post('signin', array("uses" => "AuthenticateController@signin"));
+Route::post('signup', array("uses" => "AuthenticateController@signup"));

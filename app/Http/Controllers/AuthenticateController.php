@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -24,44 +24,43 @@ use App\Helpers\Utility;
 use Session;
 //use Input;
 
-class AuthenticateController extends Controller {   
-    
+class AuthenticateController extends Controller {
+
     public function signin(Request $request){
         try{
             $content = $request::getContent();
             Log::debug('$content');
-            Log::debug($content);
-            
+
             //print_r($content);
-            
+
             $jsondata = json_decode($content);
 
-            $phoneno = $jsondata->PhoneNo;
-            $password = $jsondata->Password;
-            
+            $phoneno = $jsondata->data->phone;
+            $password = $jsondata->data->password;
+
             $validator = Validator::make(
                     ['cu_phone' => $phoneno,
                      'password' => $password],
                     ['cu_phone' => 'required',
-                     'password' => 'required'], 
+                     'password' => 'required'],
                     $messages = array(
                         'cu_phone.required' => json_encode(config('validation_message.required')),
                         'password.required' => json_encode(config('validation_message.required'))
                     ));
-                    if ($validator->fails()) {    
+                    if ($validator->fails()) {
                         return Utility::validation_err($validator);
                     }
-            if(Auth::attempt(['cu_phone' => $phoneno, 'password' => $password])) {      
+            if(Auth::attempt(['cu_phone' => $phoneno, 'password' => $password])) {
                 $retArr['status'] = "SUCCESS";
                 $retArr['messages'] = 'Authentication Success';
                 $retArr['data']="phone=".$phoneno."|password=".$password;
-                Log::debug(json_encode($retArr));     
+                Log::debug(json_encode($retArr));
                return json_encode($retArr);
-            } else {        
+            } else {
                $retArr['status'] = "ERROR";
                $retArr['messages'] = 'Authentication Failed';
                $retArr['data']="phone=".$phoneno."|password=".$password;
-               Log::debug(json_encode($retArr));     
+               Log::debug(json_encode($retArr));
                return json_encode($retArr);
             }
         }catch (Exception $ex) {
@@ -69,47 +68,47 @@ class AuthenticateController extends Controller {
             return json_encode(Utility::genErrResp("internal_err"));
         }
     }
-    public function logout(){  
+    public function logout(){
         try{
             Session::flush();
             $retArr['status'] = "SUCCESS";
             $retArr['messages'] = "Logout Successfully";
             $retArr['data']="Session ended";
-            Log::debug(json_encode($retArr));     
+            Log::debug(json_encode($retArr));
             Log::debug("--Logout--");
             Log::debug(json_encode($retArr));
             return json_encode($retArr);
         }catch (Exception $ex) {
             Log::debug("exception: " . $ex);
             return json_encode(Utility::genErrResp("internal_err"));
-        }        
+        }
     }
-    
-     public function signup(Request $request){  
+
+     public function signup(Request $request){
         try{
             $content = $request::getContent();
             Log::debug('$content');
             Log::debug($content);
             $jsondata=json_decode($content, true);
             $fullname = $jsondata['data']['fullName'];
-            $mobileno = $jsondata['data']['mobileNo'];
+            $phone = $jsondata['data']['phone'];
             $email = $jsondata['data']['email'];
             $password = $jsondata['data']['password'];
-            $repassword = $jsondata['data']['retypePassword'];
+            $repassword = $jsondata['data']['rePassword'];
             $curr_date = date('Y-m-d H:i:s T');
             $cu_cust_id="homemade000";
-            
+
             $validator = Validator::make(
                             [
                         'cu_name' => $fullname,
                         'cu_name_reg' => $fullname,
-                        'cu_phone' => $mobileno,
-                        'cu_phone_reg'=>$mobileno,
+                        'cu_phone' => $phone,
+                        'cu_phone_reg'=>$phone,
                         'cu_email' => $email,
                         'cu_password' => $password,
                         'cu_repasswd'=> $repassword
                             ], [
-                        'cu_name' =>"required|min:6",  
+                        'cu_name' =>"required|min:6",
                         'cu_phone' => "required|unique:customer,cu_phone",
                         'cu_password' => "required|min:6",
                         'cu_email' => "email",
@@ -131,13 +130,13 @@ class AuthenticateController extends Controller {
                         'cu_email.email' => json_encode(config('validation_message.cu_email')),
                         'cu_phone_reg.regex' => json_encode(config('validation_message.cu_phone_reg'))
                     ));
-            if ($validator->fails()) {    
+            if ($validator->fails()) {
                return Utility::validation_err($validator);
             }
             $cu_id = DB::table('customer')->insertGetId(
                                 ['cu_name' => $fullname,
-                                    'cu_phone' => $mobileno,
-                                    'password' => md5($password),
+                                    'cu_phone' => $phone,
+                                    'cu_password' => bcrypt($password),
                                     'cu_email' => $email,
                                     'cu_cust_id' => $cu_cust_id,
                                     'cu_last_logged_in' => NULL,
@@ -145,15 +144,15 @@ class AuthenticateController extends Controller {
                                     'updated_at' => $curr_date,
                                     'deleted_at' => NULL
                                 ],'cu_id');
-            if($cu_id){    
+            if($cu_id){
                 $update_id = DB::table('customer')
                 ->where("cu_id", $cu_id)
-                ->update(array("cu_cust_id" => $cu_cust_id.$cu_id));  
+                ->update(array("cu_cust_id" => $cu_cust_id.$cu_id));
                 if($update_id){
                     $retArr['status'] = "success";
                     $retArr['messages'] = "signUp Successfully";
                     $retArr['data']="Signup successfully for customer ".$cu_id;
-                    Log::debug(json_encode($retArr));     
+                    Log::debug(json_encode($retArr));
                     Log::debug("--Signup--");
                     Log::debug(json_encode($retArr));
                     return json_encode($retArr);
@@ -162,11 +161,11 @@ class AuthenticateController extends Controller {
         }catch (Exception $ex) {
             Log::debug("exception: " . $ex);
             return json_encode(Utility::genErrResp("internal_err"));
-        }        
+        }
     }
-    
-    
-  
 
-    
+
+
+
+
 }
