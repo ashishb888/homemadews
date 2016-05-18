@@ -31,8 +31,7 @@ class AuthenticateController extends Controller {
             $content = $request::getContent();
             Log::debug('$content');
 
-            //print_r($content);
-
+           
             $jsondata = json_decode($content);
 
             $phoneno = $jsondata->data->phone;
