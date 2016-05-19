@@ -14,11 +14,11 @@ class Membership extends Migration
     {
          if (!Schema::hasTable('membership')) {
             Schema::create('membership', function (Blueprint $table) {
-                $table->increments('me_id');
-                $table->string('me_type',20);
-                $table->string('me_description',200);
-                $table->integer('me_total_days');
-                $table->double('me_price',10,2);
+                $table->increments('id');
+                $table->string('type',20)->nullable();
+                $table->string('description',200)->nullable();
+                $table->integer('total_days')->nullable();
+                $table->double('price',10,2)->nullable();
                 $table->timestamps();
                 $table->softDeletes();
                 $table->engine = 'InnoDB';

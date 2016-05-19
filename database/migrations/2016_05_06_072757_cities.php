@@ -14,8 +14,8 @@ class Cities extends Migration
     {
          if (!Schema::hasTable('city')) {
             Schema::create('city', function (Blueprint $table) {
-                $table->increments('ct_id');
-                $table->string('ct_name',20);
+                $table->increments('id');
+                $table->string('name',50)->nullable();
                 $table->timestamps();
                 $table->softDeletes();
                 $table->engine = 'InnoDB';            

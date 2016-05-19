@@ -14,13 +14,13 @@ class Customer extends Migration
     {
         if(!Schema::hasTable('customer')) {
             Schema::create('customer', function (Blueprint $table) {
-                $table->increments('cu_id');
-                $table->string('cu_name',20);
-                $table->string('cu_phone',20);
-                $table->string('cu_password',50);
-                $table->string('cu_email',100);
-                $table->string('cu_cust_id',20);
-                $table->timestamp('cu_last_logged_in');
+                $table->increments('id');
+                $table->string('name',50);
+                $table->string('phone',20);
+                $table->string('password',250);
+                $table->string('email',100)->nullable();
+                $table->string('cust_id',20);
+                $table->timestamp('last_logged_in')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
                 $table->engine = 'InnoDB';            

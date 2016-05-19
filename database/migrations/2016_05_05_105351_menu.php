@@ -14,15 +14,15 @@ class Menu extends Migration
     {
         if (!Schema::hasTable('menu')) {
             Schema::create('menu', function (Blueprint $table) {
-                $table->increments('me_id');
-                $table->integer('me_dish_id')->unsigned();
-                $table->timestamp('me_date');
-                $table->string('me_food_type',20);
-                $table->double('me_price',10,2);
+                $table->increments('id');
+                $table->integer('dish_id')->unsigned();
+                $table->timestamp('date');
+                $table->string('food_type',20)->nullable();
+                $table->double('price',10,2)->nullable();
                 $table->timestamps();
                 $table->softDeletes();
                 $table->engine = 'InnoDB';
-                $table->foreign('me_dish_id')->references('di_id')->on('dishes');    
+                $table->foreign('dish_id')->references('id')->on('dishes');    
             });
     
         }

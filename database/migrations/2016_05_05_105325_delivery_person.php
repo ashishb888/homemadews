@@ -14,14 +14,14 @@ class DeliveryPerson extends Migration
     {
         if (!Schema::hasTable('delivery_person')) {
             Schema::create('delivery_person', function (Blueprint $table) {
-                $table->increments('dp_id');
-                $table->string('dp_username',20);
-                $table->string('dp_password',50);
-                $table->string('dp_firstname',20);
-                $table->string('dp_lastname',20);
-                $table->string('dp_kyc_proof',5);
-                $table->string('dp_kyc_type',20);
-                $table->timestamp('dp_last_logged_in');
+                $table->increments('id');
+                $table->string('username',50);
+                $table->string('password',250);
+                $table->string('firstname',20);
+                $table->string('lastname',20);
+                $table->string('kyc_proof',5);
+                $table->string('kyc_type',20);
+                $table->timestamp('last_logged_in')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
                 $table->engine = 'InnoDB';            

@@ -14,10 +14,10 @@ class DishTypes extends Migration
     {
         if (!Schema::hasTable('dish_types')) {
             Schema::create('dish_types', function (Blueprint $table) {
-                $table->increments('dt_id');
-                $table->string('dt_name',20);
-                $table->string('dt_code',20);
-                $table->string('dt_type',20);
+                $table->increments('id');
+                $table->string('name',20);
+                $table->string('code',20);
+                $table->string('type',20)->nullable();
                 $table->timestamps();
                 $table->softDeletes();
                 $table->engine = 'InnoDB';            

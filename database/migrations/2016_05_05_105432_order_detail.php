@@ -14,13 +14,13 @@ class OrderDetail extends Migration
     {
          if (!Schema::hasTable('order_detail')) {
             Schema::create('order_detail', function (Blueprint $table) {
-                $table->increments('od_order_id');
-                $table->integer('od_dish_id')->unsigned();
-                $table->integer('od_order_quantity');
+                $table->increments('order_id');
+                $table->integer('dish_id')->unsigned();
+                $table->integer('order_quantity')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
                 $table->engine = 'InnoDB';
-                $table->foreign('od_dish_id')->references('di_id')->on('dishes');
+                $table->foreign('dish_id')->references('id')->on('dishes');
             });
     
         }

@@ -14,18 +14,18 @@ class CustomerMembership extends Migration
     {
          if (!Schema::hasTable('customer_membership')) {
             Schema::create('customer_membership', function (Blueprint $table) {
-                $table->increments('cm_id');
-                $table->integer('cm_cust_id')->unsigned();
-                $table->integer('cm_member_id')->unsigned();
-                $table->timestamp('cm_valid_from');
-                $table->timestamp('cm_valid_to');
-                $table->string('cm_payment_type',20);
-                $table->integer('cm_total_orders');
+                $table->increments('id');
+                $table->integer('cust_id')->unsigned();
+                $table->integer('member_id')->unsigned();
+                $table->timestamp('valid_from');
+                $table->timestamp('valid_to');
+                $table->string('payment_type',20)->nullable();
+                $table->integer('total_orders')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
                 $table->engine = 'InnoDB';
-                $table->foreign('cm_cust_id')->references('cu_id')->on('customer');  
-                $table->foreign('cm_member_id')->references('me_id')->on('membership');
+                $table->foreign('cust_id')->references('id')->on('customer');  
+                $table->foreign('member_id')->references('id')->on('membership');
             });
     
         }

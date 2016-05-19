@@ -14,13 +14,13 @@ class AreaLocations extends Migration
     {
        if (!Schema::hasTable('area_location')) {
             Schema::create('area_location', function (Blueprint $table) {
-                $table->increments('al_id');
-                $table->integer('al_location_id')->unsigned();
-                $table->string('al_name',20);
+                $table->increments('id');
+                $table->integer('location_id')->unsigned();
+                $table->string('name',50)->nullable();
                 $table->timestamps();
                 $table->softDeletes();
                 $table->engine = 'InnoDB';
-                $table->foreign('al_location_id')->references('ar_id')->on('area'); 
+                $table->foreign('location_id')->references('id')->on('area'); 
             });
     
         }

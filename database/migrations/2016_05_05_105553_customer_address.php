@@ -14,13 +14,13 @@ class CustomerAddress extends Migration
     {
          if (!Schema::hasTable('customer_addresses')) {
             Schema::create('customer_addresses', function (Blueprint $table) {
-                $table->increments('ca_id');
-                $table->integer('ca_cust_id')->unsigned();
-                $table->string('ca_address',200);
+                $table->increments('id');
+                $table->integer('cust_id')->unsigned();
+                $table->string('address',200)->nullable();
                 $table->timestamps();
                 $table->softDeletes();
                 $table->engine = 'InnoDB';
-                $table->foreign('ca_cust_id')->references('cu_id')->on('customer');
+                $table->foreign('cust_id')->references('id')->on('customer');
             });
     
         }
