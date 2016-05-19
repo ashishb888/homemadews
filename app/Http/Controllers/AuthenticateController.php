@@ -53,8 +53,7 @@ class AuthenticateController extends Controller {
                 
                 $retArr['status'] = "SUCCESS";
                 $retArr['messages'] = 'Authentication Success';
-                $retArr['data']['id']="cust_id";
-                $retArr['data']['value']=$cust_id;
+                $retArr['data']['cust_id']=$cust_id;
                 Log::debug(json_encode($retArr));
                return json_encode($retArr);
             } else {
