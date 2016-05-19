@@ -104,7 +104,7 @@ class AuthenticateController extends Controller {
                         'repasswd'=> $repassword
                             ], [
                         'name' => array('required','min:3','Regex:/^[A-Za-z\ \'\\.]+$/'),
-                        'phone' => array('required', 'unique:customer,phone', 'Regex:/^(\+\d{1,3}[- ]?)?\d{10}$/'),
+                        'phone' => array('required', 'unique:customer,phone', 'Regex:/^[789]\d{9}$/'),
                         'password' => "required|min:6",
                         'email' => "email",
                         'repasswd'=>"required|min:6|same:password"
@@ -130,7 +130,7 @@ class AuthenticateController extends Controller {
 
                 if($customer_up){
                     DB::commit();
-                    $retArr['status'] = "success";
+                    $retArr['status'] = "SUCCESS";
                     $retArr['messages'] = "signUp Successfully";
                     $retArr['data']="Signup successfully for customer ".$insertedId;
                     Log::debug(json_encode($retArr));

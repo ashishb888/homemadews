@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 
 class Constants {
-    const DATA = 'data';
+     const DATA = 'data';
     const RESP = 'resp';
-    const MSG = 'msg';
+    const MESSAGES = 'messages';
     const STATUS = 'status';
     const ERRORS = 'errors';
     const CODE = 'code';
