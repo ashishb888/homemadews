@@ -15,13 +15,13 @@ class Orders extends Migration
          if (!Schema::hasTable('orders')) {
             Schema::create('orders', function (Blueprint $table) {
                 $table->increments('id');
-                $table->integer('cust_id')->unsigned();
+                $table->string('cust_id',20)->unsigned();
                 $table->integer('menu_id')->unsigned();
                 $table->double('total_price',10,2)->nullable();
                 $table->timestamps();
                 $table->softDeletes();
                 $table->engine = 'InnoDB';
-                $table->foreign('cust_id')->references('id')->on('customer');  
+                $table->foreign('cust_id')->references('cust_id')->on('customer');  
                 $table->foreign('menu_id')->references('id')->on('menu');
             });
     

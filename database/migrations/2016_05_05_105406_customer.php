@@ -19,7 +19,7 @@ class Customer extends Migration
                 $table->string('phone',20);
                 $table->string('password',250);
                 $table->string('email',100)->nullable();
-                $table->string('cust_id',20);
+                $table->string('cust_id',20)->unique();
                 $table->timestamp('last_logged_in')->nullable();
                 $table->timestamps();
                 $table->softDeletes();

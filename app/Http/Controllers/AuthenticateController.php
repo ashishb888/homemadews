@@ -47,10 +47,9 @@ class AuthenticateController extends Controller {
                     if ($validator->fails()) {
                         return Utility::validation_err($validator);
                     }
-            if(Auth::attempt(['phone' => $phoneno, 'password' => $password])) {
-                
+            if(Auth::attempt(['phone' => $phoneno, 'password' => $password])) {        
                 $cust_id = DB::table('customer')->where('phone', $phoneno)->value('cust_id');
-                
+                Session::put('cust_id', $cust_id);
                 $retArr['status'] = "SUCCESS";
                 $retArr['messages'] = 'Authentication Success';
                 $retArr['data']['cust_id']=$cust_id;

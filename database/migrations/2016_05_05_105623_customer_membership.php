@@ -15,7 +15,7 @@ class CustomerMembership extends Migration
          if (!Schema::hasTable('customer_membership')) {
             Schema::create('customer_membership', function (Blueprint $table) {
                 $table->increments('id');
-                $table->integer('cust_id')->unsigned();
+                $table->string('cust_id',20)->unsigned();
                 $table->integer('member_id')->unsigned();
                 $table->timestamp('valid_from');
                 $table->timestamp('valid_to');
@@ -24,7 +24,7 @@ class CustomerMembership extends Migration
                 $table->timestamps();
                 $table->softDeletes();
                 $table->engine = 'InnoDB';
-                $table->foreign('cust_id')->references('id')->on('customer');  
+                $table->foreign('cust_id')->references('cust_id')->on('customer');  
                 $table->foreign('member_id')->references('id')->on('membership');
             });
     
