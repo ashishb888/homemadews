@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use DB;
 use App\Models\Customer_addresses;
+use App\Models\Cities;
+use App\Models\Areas;
+use App\Models\Area_Locations;
 use Illuminate\Support\Facades\Validator;
 use Hash;
 use Request;
@@ -96,6 +99,36 @@ class CustomerController extends Controller
                 $retArr['status'] = "SUCCESS";
                 $retArr['messages'] = "Address not present";
                 $retArr['data']['isAddressPresent']=false;
+                Log::debug(json_encode($retArr));
+                Log::debug("--addAddress--");
+                Log::debug(json_encode($retArr));
+                return json_encode($retArr);
+            }
+            
+        } catch (Exception $ex) {
+             Log::debug("exception: " . $ex);
+            return json_encode(Utility::genErrResp("internal_err"));
+
+        }
+    }
+     public function locations(Request $request){
+        try{
+            $cities = new Cities;
+            $cities = Cities::all();
+            foreach ($cities as $city) {
+            $data[$city->name] = DB::table('area')->select('id','name')->where('city_id', '=', $city->id)->get();
+            } 
+            $new_data=array();
+            foreach($data as $key=>$val){
+                foreach($val as $val1){
+                $location= DB::table('area_location')->select('name')->where('location_id', '=', $val1->id)->get();
+                 $new_data[$key][$val1->name][]=$location[0]->name;
+                }
+            }
+            if($cities){
+                $retArr['status'] = "SUCCESS";
+                $retArr['messages'] = "City List";
+                $retArr['data']=$new_data;
                 Log::debug(json_encode($retArr));
                 Log::debug("--addAddress--");
                 Log::debug(json_encode($retArr));
