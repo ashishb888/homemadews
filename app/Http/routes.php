@@ -21,3 +21,5 @@ Route::post('signup', array("uses" => "AuthenticateController@signup"));
 Route::post('address', array("uses" => "CustomerController@addAddress"));
 Route::get('address/{cust_id}', array("uses" => "CustomerController@checkAddress"));
 Route::post('locations', array("uses" => "CustomerController@locations"));
+//Route::post('lunchmenu', array("uses" => "OrderController@lunchMenu"));
+Route::post('menu', array("uses" => "OrderController@menu"));
